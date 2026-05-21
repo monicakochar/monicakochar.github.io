@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Circle</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Outfit:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #3a6b35;
+    --dark: #1a1a18;
+    --warm: #f5f3ef;
+    --mid: #8a8a82;
+    --border: #d8d5ce;
+    --accent: #c8b89a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    background: var(--warm);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.4rem 4rem;
+    background: rgba(245,243,239,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    transition: padding 0.3s;
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 0.9rem;
+    text-decoration: none; color: var(--dark);
+  }
+
+  .nav-logo img {
+    height: 32px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+  }
+
+  .nav-logo span {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 200;
+    font-size: 0.85rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+
+  .nav-links a {
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--dark); }
+
+  /* ─── NATIVE CAROUSEL SYSTEM ─── */
+  .carousel-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .carousel-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .carousel-slide {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .carousel-nav {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 10;
+  }
+
+  .carousel-btn {
+    background: rgba(26, 26, 24, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .carousel-btn:hover {
+    background: #fff;
+    color: var(--dark);
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 4rem 5rem;
+    position: relative; z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 1.4rem;
+    opacity: 0; animation: fadeUp 0.9s 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.08;
+    color: var(--dark);
+    opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
+  }
+
+  .hero-title em { font-style: italic; color: var(--green); }
+
+  .hero-sub {
+    margin-top: 1.8rem;
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: var(--mid);
+    max-width: 360px;
+    opacity: 0; animation: fadeUp 0.9s 0.7s forwards;
+  }
+
+  .hero-cta {
+    margin-top: 2.4rem;
+    display: flex; gap: 1.2rem; align-items: center;
+    opacity: 0; animation: fadeUp 0.9s 0.9s forwards;
+  }
+
+  .btn-primary {
+    padding: 0.85rem 2.2rem;
+    background: var(--green);
+    color: #fff;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.25s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover { background: #2d5529; }
+
+  .btn-ghost {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.1rem;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .btn-ghost:hover { color: var(--dark); border-color: var(--dark); }
+
+  .hero-right {
+    position: relative; overflow: hidden;
+    opacity: 0; animation: fadeIn 1.2s 0.2s forwards;
+  }
+
+  .hero-right::before {
+    content: '';
+    position: absolute; inset: 0; z-index: 5;
+    background: linear-gradient(to right, var(--warm) 0%, transparent 25%);
+    pointer-events: none;
+  }
+
+  .hero-scroll {
+    position: absolute; bottom: 3rem; right: 4rem;
+    display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+    font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--mid); z-index: 10;
+    animation: fadeIn 1s 1.2s both;
+  }
+
+  .scroll-line {
+    width: 1px; height: 40px; background: var(--border);
+    animation: growLine 1.5s 1.5s both;
+  }
+
+  @keyframes growLine { from { height: 0; } to { height: 40px; } }
+
+  /* ─── SECTION BASICS ─── */
+  section { padding: 7rem 4rem; }
+
+  .section-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+
+  .section-label::before {
+    content: ''; display: block;
+    width: 28px; height: 1px; background: var(--green);
+  }
+
+  .section-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.18;
+    color: var(--dark);
+  }
+
+  .section-heading em { font-style: italic; color: var(--green); }
+
+  /* ─── PRACTICE INTRO ─── */
+  .about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    border-top: 1px solid var(--border);
+  }
+
+  .about-content {
+    grid-column: span 2;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s 0.2s, transform 0.8s 0.2s;
+  }
+
+  .about-content.visible { opacity: 1; transform: translateY(0); }
+  .about-content .section-label { justify-content: center; }
+  .about-content .section-label::after {
+    content: ''; display: block; width: 28px; height: 1px; background: var(--green);
+  }
+
+  .about-text {
+    font-size: 1.25rem;
+    line-height: 1.85;
+    color: #4a4a45;
+    margin-top: 2rem;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .about-highlights {
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+  }
+
+  .highlight-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem; font-weight: 300;
+    color: var(--green); line-height: 1;
+  }
+
+  .highlight-label {
+    font-size: 0.72rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--mid);
+    margin-top: 0.3rem;
+  }
+
+  /* ─── PROJECTS ─── */
+  .projects { background: var(--dark); padding: 7rem 0; }
+
+  .projects-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 4rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 0 4rem 2.5rem 4rem;
+  }
+
+  .projects .section-label { color: var(--accent); }
+  .projects .section-label::before { background: var(--accent); }
+  .projects .section-heading { color: #f0ede8; }
+  .projects .section-heading em { color: var(--accent); }
+
+  .projects-count {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem; color: rgba(255,255,255,0.3);
+    letter-spacing: 0.1em;
+  }
+
+  /* Unified Premium Project Layout (Like Project 1) */
+  .project-featured {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 0;
+    margin-bottom: 4rem;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s, transform 0.8s;
+  }
+  
+  .project-featured:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Alternating variant to look like a high-end editorial book */
+  .project-featured.alternate {
+    grid-template-columns: 1fr 1.4fr;
+  }
+
+  .project-featured.visible { opacity: 1; transform: translateY(0); }
+
+  .project-image {
+    overflow: hidden;
+    position: relative;
+    background: #2a2a28;
+    min-height: 580px;
+  }
+
+  .project-info {
+    padding: 4.5rem;
+    background: #222220;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+  }
+  
+  .project-featured.alternate .project-info {
+    order: 1;
+  }
+  
+  .project-featured.alternate .project-image {
+    order: 2;
+  }
+
+  .project-tag {
+    position: absolute; top: 3.5rem; left: 4.5rem;
+    font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .project-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 5rem; font-weight: 300; line-height: 1;
+    color: rgba(255,255,255,0.03);
+    position: absolute; top: 3rem; right: 4.5rem;
+    pointer-events: none;
+  }
+
+  .project-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.6rem; font-weight: 300;
+    color: #f0ede8; line-height: 1.15;
+    margin-bottom: 0.6rem;
+  }
+
+  .project-location {
+    font-size: 0.75rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: rgba(255,255,255,0.35);
+    margin-bottom: 1.8rem;
+  }
+
+  .project-desc {
+    font-size: 0.88rem; line-height: 1.8;
+    color: rgba(255,255,255,0.45);
+    max-width: 360px;
+  }
+
+  /* ─── HIGHLIGHTS ROW ─── */
+  .highlights {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 0 4rem;
+  }
+
+  .highlight-item {
+    padding: 3rem 0;
+    border-right: 1px solid var(--border);
+    padding-left: 2rem;
+    opacity: 0; transform: translateY(10px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+
+  .highlight-item:first-child { padding-left: 0; }
+  .highlight-item:last-child { border-right: none; }
+  .highlight-item.visible { opacity: 1; transform: translateY(0); }
+
+  .hi-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; font-weight: 300; color: var(--green); line-height: 1;
+  }
+
+  .hi-label {
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--mid); margin-top: 0.4rem;
+  }
+
+  /* ─── CONTACT ─── */
+  .contact {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+    align-items: start;
+    border-top: 1px solid var(--border);
+  }
+
+  .contact-info {
+    margin-top: 2.5rem;
+    display: flex; flex-direction: column; gap: 1.2rem;
+  }
+
+  .contact-row {
+    display: flex; gap: 1.5rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+
+  .contact-row-label {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--mid); min-width: 80px; padding-top: 0.1rem;
+  }
+
+  .contact-row-value {
+    color: var(--dark); line-height: 1.6;
+  }
+
+  .contact-row-value a {
+    color: var(--dark); text-decoration: none; transition: color 0.2s;
+  }
+
+  .contact-row-value a:hover { color: var(--green); }
+
+  .contact-right { padding-top: 4.2rem; }
+
+  .contact-message {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 300; line-height: 1.3;
+    color: var(--dark);
+  }
+
+  .contact-message em { font-style: italic; color: var(--green); }
+
+  .contact-message-sub {
+    margin-top: 1.5rem;
+    font-size: 0.9rem; line-height: 1.8; color: var(--mid);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--dark);
+    padding: 2.5rem 4rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .footer-logo { display: flex; align-items: center; gap: 0.8rem; }
+  .footer-logo img {
+    height: 24px;
+    width: auto;
+    opacity: 0.5;
+  }
+  .footer-logo span {
+    font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .footer-copy {
+    font-size: 0.7rem; color: rgba(255,255,255,0.25);
+    letter-spacing: 0.08em;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @media (max-width: 1024px) {
+    .project-info { padding: 3rem 2.5rem; }
+    .project-tag { left: 2.5rem; top: 3rem; }
+    .project-number { right: 2.5rem; top: 2.5rem; }
+    .project-image { min-height: 480px; }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { height: 40vh; }
+    .hero-left { padding: 8rem 1.5rem 3rem; }
+    .about-content { grid-column: span 1; }
+    .about-highlights { grid-template-columns: 1fr; gap: 1.5rem; }
+    .projects { padding: 5rem 0; }
+    .projects-header { padding: 0 1.5rem 2rem 1.5rem; flex-direction: column; align-items: flex-start; gap: 1rem; }
+    
+    /* Collapse all alternating layouts into vertical stack on mobile */
+    .project-featured, .project-featured.alternate {
+      grid-template-columns: 1fr;
+      margin-bottom: 3rem;
+    }
+    .project-featured.alternate .project-info { order: 2; }
+    .project-featured.alternate .project-image { order: 1; }
+    
+    .project-info { padding: 3rem 1.5rem; }
+    .project-tag { left: 1.5rem; top: 2rem; }
+    .project-number { right: 1.5rem; top: 1.5rem; font-size: 4rem; }
+    .project-image { min-height: 400px; }
+    
+    .highlights { grid-template-columns: 1fr; padding: 0 1.5rem; }
+    .contact { grid-template-columns: 1fr; gap: 3rem; }
+    footer { flex-direction: column; gap: 1rem; padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="GCLogo.jpeg" alt="..">
+    <span>Green Circle</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero" style="padding:0;">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Architecture &amp; Spatial Practice</p>
+    <h1 class="hero-title">Where space<br>meets <em>intention</em></h1>
+    <p class="hero-sub">A premium architecture and design practice working at the intersection of built permanence, low-impact sustainability, and refined engineering layout models.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View Portfolio</a>
+      <a href="#about" class="btn-ghost">Our Practice</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="carousel-container" id="hero-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide"><img src="Carousel1.png" alt="Banner Slide 1"></div>
+        <div class="carousel-slide"><img src="Carousel2.png" alt="Banner Slide 2"></div>
+        <div class="carousel-slide"><img src="Carousel3.png" alt="Banner Slide 3"></div>
+      </div>
+      <div class="carousel-nav">
+        <button class="carousel-btn prev-btn">←</button>
+        <button class="carousel-btn next-btn">→</button>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="highlights">
+  <div class="highlight-item">
+    <div class="hi-num">10+</div>
+    <div class="hi-label">Years of Experience</div>
+  </div>
+  <div class="highlight-item">
+    <div class="hi-num">2</div>
+    <div class="hi-label">Continents Touched</div>
+  </div>
+  <div class="highlight-item">
+    <div class="hi-num">2</div>
+    <div class="hi-label">Licensed Jurisdictions</div>
+  </div>
+</div>
+
+<section class="about" id="about">
+  <div class="about-content">
+    <p class="section-label">About Green Circle</p>
+    <h2 class="section-heading">Structuring premium space with absolute <em>context</em> and deep commitment.</h2>
+    <p class="about-text">
+      Green Circle operates internationally to execute high-performance residential, commercial, and experiential spaces. Our structural alignment ensures material honesty, layout optimization, and carbon-responsive details remain core to every conceptual phase.
+    </p>
+    <div class="about-highlights">
+      <div>
+        <div class="highlight-num">Global</div>
+        <div class="highlight-label">Design Framework</div>
+      </div>
+      <div>
+        <div class="highlight-num">Local</div>
+        <div class="highlight-label">Material Integrity</div>
+      </div>
+      <div>
+        <div class="highlight-num">Sustain</div>
+        <div class="highlight-label">Built Foundation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="projects" id="projects">
+  <div class="projects-header">
+    <div>
+      <p class="section-label">Selected Works</p>
+      <h2 class="section-heading">Spaces that<br><em>define us</em></h2>
+    </div>
+    <div class="projects-count">Architectural Portfolio</div>
+  </div>
+
+  <div class="project-featured">
+    <div class="project-image">
+      <div class="carousel-container" id="project-1-carousel">
+        <div class="carousel-track">
+          <div class="carousel-slide"><img src="p1i1.png" alt="Uthandi Image 1"></div>
+          <div class="carousel-slide"><img src="p1i2.png" alt="Uthandi Image 2"></div>
+          <div class="carousel-slide"><img src="p1i3.png" alt="Uthandi Image 3"></div>
+        </div>
+        <div class="carousel-nav">
+          <button class="carousel-btn prev-btn">←</button>
+          <button class="carousel-btn next-btn">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="project-info">
+      <span class="project-tag">Residential · Green Circle</span>
+      <p class="project-number">01</p>
+      <h3 class="project-name">Uthandi<br>Coastal House</h3>
+      <p class="project-location">Chennai, India</p>
+      <p class="project-desc">A coastal masterwork linking progressive design geometry with clean regional textures—integrating native masonry, structural glass, and timber ventilation frames seamlessly.</p>
+    </div>
+  </div>
+
+  <div class="project-featured alternate">
+    <div class="project-image">
+      <div class="carousel-container" id="project-2-carousel">
+        <div class="carousel-track">
+          <div class="carousel-slide"><img src="p2i1.png" alt="The Lattice Image 1"></div>
+          <div class="carousel-slide"><img src="p2i2.png" alt="The Lattice Image 2"></div>
+          <div class="carousel-slide"><img src="p2i3.png" alt="The Lattice Image 3"></div>
+        </div>
+        <div class="carousel-nav">
+          <button class="carousel-btn prev-btn">←</button>
+          <button class="carousel-btn next-btn">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="project-info">
+      <span class="project-tag">Mixed-Use · Green Circle</span>
+      <p class="project-number">02</p>
+      <h3 class="project-name">The<br>Lattice</h3>
+      <p class="project-location">New York, USA</p>
+      <p class="project-desc">A complex engineering layout model introducing interconnected modules that optimize workspace utility, structural load balancing, and atmospheric daylight exposure.</p>
+    </div>
+  </div>
+
+  <div class="project-featured">
+    <div class="project-image">
+      <div class="carousel-container" id="project-3-carousel">
+        <div class="carousel-track">
+          <div class="carousel-slide"><img src="p3i1.png" alt="Ma'kana Image 1"></div>
+          <div class="carousel-slide"><img src="p3i2.png" alt="Ma'kana Image 2"></div>
+          <div class="carousel-slide"><img src="p3i3.png" alt="Ma'kana Image 3"></div>
+        </div>
+        <div class="carousel-nav">
+          <button class="carousel-btn prev-btn">←</button>
+          <button class="carousel-btn next-btn">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="project-info">
+      <span class="project-tag">Hospitality · Green Circle</span>
+      <p class="project-number">03</p>
+      <h3 class="project-name">Ma'kana<br>Resort</h3>
+      <p class="project-location">Global Portfolio</p>
+      <p class="project-desc">An immersive sustainable hospitality getaway merging high-performance luxury villas into the immediate ecosystem without changing the native natural grade lines.</p>
+    </div>
+  </div>
+
+  <div class="project-featured alternate">
+    <div class="project-image">
+      <div class="carousel-container" id="project-4-carousel">
+        <div class="carousel-track">
+          <div class="carousel-slide"><img src="p4i1.png" alt="DL 1961 Space Image 1"></div>
+          <div class="carousel-slide"><img src="p4i2.png" alt="DL 1961 Space Image 2"></div>
+          <div class="carousel-slide"><img src="p4i3.png" alt="DL 1961 Space Image 3"></div>
+        </div>
+        <div class="carousel-nav">
+          <button class="carousel-btn prev-btn">←</button>
+          <button class="carousel-btn next-btn">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="project-info">
+      <span class="project-tag">Retail · Green Circle</span>
+      <p class="project-number">04</p>
+      <h3 class="project-name">DL 1961<br>Space</h3>
+      <p class="project-location">New York, USA</p>
+      <p class="project-desc">A premium flagship retail design highlighting circular low-impact building elements, custom architectural metal frames, and ultra-focused sculptural light configurations.</p>
+    </div>
+  </div>
+
+  <div class="project-featured">
+    <div class="project-image">
+      <div class="carousel-container" id="project-5-carousel">
+        <div class="carousel-track">
+          <div class="carousel-slide"><img src="p5i1.png" alt="DL 1961 UK Image 1"></div>
+          <div class="carousel-slide"><img src="p5i2.png" alt="DL 1961 UK Image 2"></div>
+          <div class="carousel-slide"><img src="p5i3.png" alt="DL 1961 UK Image 3"></div>
+        </div>
+        <div class="carousel-nav">
+          <button class="carousel-btn prev-btn">←</button>
+          <button class="carousel-btn next-btn">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="project-info">
+      <span class="project-tag">Retail Showcase · Green Circle</span>
+      <p class="project-number">05</p>
+      <h3 class="project-name">DL 1961<br>UK Showcase</h3>
+      <p class="project-location">London, United Kingdom</p>
+      <p class="project-desc">A sophisticated international brand execution built inside a heritage building envelopment—balancing stringent local structural parameters with progressive layout systems.</p>
+    </div>
+  </div>
+
+  <div class="project-featured alternate">
+    <div class="project-image">
+      <div class="carousel-container" id="project-6-carousel">
+        <div class="carousel-track">
+          <div class="carousel-slide"><img src="p6i1.png" alt="Antalya Image 1"></div>
+          <div class="carousel-slide"><img src="p6i2.png" alt="Antalya Image 2"></div>
+          <div class="carousel-slide"><img src="p6i3.png" alt="Antalya Image 3"></div>
+        </div>
+        <div class="carousel-nav">
+          <button class="carousel-btn prev-btn">←</button>
+          <button class="carousel-btn next-btn">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="project-info">
+      <span class="project-tag">Premium Residential · Architecture</span>
+      <p class="project-number">06</p>
+      <h3 class="project-name">Antalya<br>Residences</h3>
+      <p class="project-location">New York, USA</p>
+      <p class="project-desc">A premium urban residential layout engineering broad double-height spaces, material truth accents, and seamless transitional threshold layouts from interior to exterior.</p>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="contact-left">
+    <p class="section-label">Contact</p>
+    <h2 class="section-heading">Let's build<br><em>together</em></h2>
+    <div class="contact-info">
+      <div class="contact-row">
+        <span class="contact-row-label">Email</span>
+        <span class="contact-row-value">
+          <a href="mailto:monica@greencircle.studio">monica@greencircle.studio</a>
+        </span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-row-label">Based in</span>
+        <span class="contact-row-value">New York, USA</span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-row-label">Practice</span>
+        <span class="contact-row-value">Architecture · Sustainability · Master Planning</span>
+      </div>
+    </div>
+  </div>
+  <div class="contact-right">
+    <p class="contact-message">Every great building<br>begins with a<br><em>conversation.</em></p>
+    <p class="contact-message-sub">Whether it is an ambitious luxury eco-resort, an iconic urban boutique storefront, or a premium custom estate—our team lines structural integrity with clear architectural aesthetic values.</p>
+    <div style="margin-top:2.5rem;">
+      <a href="mailto:monica@greencircle.studio" class="btn-primary" style="display:inline-block; text-decoration: none;">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">
+    <img src="GCLogo.jpeg" alt="..">
+    <span>Green Circle</span>
+  </div>
+  <p class="footer-copy">© 2026 Green Circle. New York, USA</p>
+</footer>
+
+<script>
+  // SCROLL INTERSECTION ANIMATION SETUP
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) {
+        el.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll(
+    '.about-content, .project-featured, .highlight-item'
+  ).forEach(el => observer.observe(el));
+
+  document.querySelectorAll('.highlight-item').forEach((el, i) => {
+    el.style.transitionDelay = `${i * 0.1}s`;
+  });
+
+  // CAROUSEL COMPONENT FRAMEWORK
+  class Carousel {
+    constructor(container) {
+      this.container = container;
+      this.track = container.querySelector('.carousel-track');
+      this.slides = Array.from(container.querySelectorAll('.carousel-slide'));
+      this.nextButton = container.querySelector('.next-btn');
+      this.prevButton = container.querySelector('.prev-btn');
+      this.currentIndex = 0;
+      
+      this.initEvents();
+    }
+    
+    initEvents() {
+      if (this.nextButton && this.prevButton) {
+        this.nextButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.moveToSlide(this.currentIndex + 1);
+        });
+        
+        this.prevButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.moveToSlide(this.currentIndex - 1);
+        });
+      }
+    }
+    
+    moveToSlide(index) {
+      if (index < 0) {
+        this.currentIndex = this.slides.length - 1;
+      } else if (index >= this.slides.length) {
+        this.currentIndex = 0;
+      } else {
+        this.currentIndex = index;
+      }
+      
+      const amountToMove = -100 * this.currentIndex;
+      this.track.style.transform = `translateX(${amountToMove}%)`;
+    }
+  }
+
+  document.querySelectorAll('.carousel-container').forEach(container => {
+    new Carousel(container);
+  });
+</script>
+
+</body>
+</html>
